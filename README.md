@@ -1,5 +1,5 @@
 
-# Rigol VXI11 remote control tool
+# Rigol VXI11 remote control tool for the command line
 
 ## Prior Art
 
