@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
 import sys
-import getopt
 import vxi11
 
 if __name__ == "__main__":
