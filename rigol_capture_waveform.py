@@ -12,10 +12,12 @@ if __name__ == "__main__":
 
     now = int(round(time.time()))
 
-    print(i.ask("*IDN?"))
+    print(i.ask("*idn?"))
 
-    # FIXME: only STOP when not stopped yet. pressing STOP in record mode will start new recording.
-    i.write(':STOP')
+    if 1 != int(i.ask(":function:wrecord:enable?")) or "STOP" != i.ask(":function:wrecord:operate?"):
+        # only stop if not in waveform recording mode and not actually
+        # recording right now. it would restart recording in that case.
+        i.write(':stop')
 
     for channel in ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
             "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", 
@@ -23,25 +25,25 @@ if __name__ == "__main__":
 
         # skip channel if it is not displayed
         if channel.startswith("CHAN"):
-            i.write(':WAV:MODE MAX')
-            if int(i.ask(':{}:DISP?'.format(channel))) == 0:
+            i.write(':waveform:mode max')
+            if int(i.ask(':{}:display?'.format(channel))) == 0:
                 continue
         elif channel.startswith("MATH"):
-            i.write(':WAV:MODE NORMAL')
-            if int(i.ask(':{}:DISP?'.format(channel))) == 0:
+            i.write(':waveform:mode normal')
+            if int(i.ask(':{}:display?'.format(channel))) == 0:
                 continue
         elif channel.startswith("D"):
-            i.write(':WAV:MODE MAX')
-            if int(i.ask(':LA:DISP? {}'.format(channel))) == 0:
+            i.write(':waveform:mode max')
+            if int(i.ask(':LA:display? {}'.format(channel))) == 0:
                 continue
         else:
             raise RuntimeError("invalid channel '{}'".format(channel))
 
         # select channel
-        i.write(':WAV:SOUR {}'.format(channel))
-        i.write(':WAV:FORM BYTE')
+        i.write(':waveform:source {}'.format(channel))
+        i.write(':waveform:format byte')
 
-        preamble = i.ask(":WAV:PRE?").split(",")
+        preamble = i.ask(":waveform:preamble?").split(",")
         print(preamble)
 
         memdepth = int(round(float(preamble[2])))
@@ -66,9 +68,9 @@ if __name__ == "__main__":
                 start = pos
                 end = pos + chunksize - 1
                 print("    {}..{}".format(start, end))
-                i.write(':WAV:STAR {}'.format(start))
-                i.write(':WAV:STOP {}'.format(end))
-                chunk = i.ask_raw(':WAVEform:DATA?')
+                i.write(':waveform:start {}'.format(start))
+                i.write(':waveform:stop {}'.format(end))
+                chunk = i.ask_raw(':waveform:data?')
                 pos += chunksize
                 chunk = chunk[11:-1]
                 dump.write(chunk)
