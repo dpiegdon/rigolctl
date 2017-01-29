@@ -14,10 +14,12 @@ if __name__ == "__main__":
 
     print(i.ask("*idn?"))
 
-    if 1 != int(i.ask(":function:wrecord:enable?")) or "STOP" != i.ask(":function:wrecord:operate?"):
+    if 1 != int(i.ask(":function:wrecord:enable?")):
         # only stop if not in waveform recording mode and not actually
         # recording right now. it would restart recording in that case.
-        i.write(':stop')
+        i.write(":stop")
+    elif "STOP" != i.ask(":function:wrecord:operate?"):
+        i.write(":function:wrecord:operate stop")
 
     for channel in ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
             "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", 
@@ -25,23 +27,23 @@ if __name__ == "__main__":
 
         # skip channel if it is not displayed
         if channel.startswith("CHAN"):
-            i.write(':waveform:mode max')
-            if int(i.ask(':{}:display?'.format(channel))) == 0:
+            i.write(":waveform:mode max")
+            if int(i.ask(":{}:display?".format(channel))) == 0:
                 continue
         elif channel.startswith("MATH"):
-            i.write(':waveform:mode normal')
-            if int(i.ask(':{}:display?'.format(channel))) == 0:
+            i.write(":waveform:mode normal")
+            if int(i.ask(":{}:display?".format(channel))) == 0:
                 continue
         elif channel.startswith("D"):
-            i.write(':waveform:mode max')
-            if int(i.ask(':LA:display? {}'.format(channel))) == 0:
+            i.write(":waveform:mode max")
+            if int(i.ask(":LA:display? {}".format(channel))) == 0:
                 continue
         else:
             raise RuntimeError("invalid channel '{}'".format(channel))
 
         # select channel
-        i.write(':waveform:source {}'.format(channel))
-        i.write(':waveform:format byte')
+        i.write(":waveform:source {}".format(channel))
+        i.write(":waveform:format byte")
 
         preamble = i.ask(":waveform:preamble?").split(",")
         print(preamble)
@@ -68,9 +70,9 @@ if __name__ == "__main__":
                 start = pos
                 end = pos + chunksize - 1
                 print("    {}..{}".format(start, end))
-                i.write(':waveform:start {}'.format(start))
-                i.write(':waveform:stop {}'.format(end))
-                chunk = i.ask_raw(':waveform:data?')
+                i.write(":waveform:start {}".format(start))
+                i.write(":waveform:stop {}".format(end))
+                chunk = i.ask_raw(":waveform:data?")
                 pos += chunksize
                 chunk = chunk[11:-1]
                 dump.write(chunk)
