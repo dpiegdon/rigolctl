@@ -83,28 +83,41 @@ if __name__ == "__main__":
 
     print(instrument.ask("*idn?"))
 
+    beeper = int(instrument.ask(":system:beeper?"))
+    if beeper != 0:
+        instrument.write(":system:beeper 0")
+
     record_count = -1
 
-    # only stop if not in waveform recording mode and not actually
-    # recording right now. it would restart recording in that case.
-    if 1 != int(instrument.ask(":function:wrecord:enable?")):
-        instrument.write(":stop")
-    elif "STOP" != instrument.ask(":function:wrecord:operate?"):
-        instrument.write(":function:wrecord:operate stop")
+    try:
+        # only stop if not in waveform recording mode and not actually
+        # recording right now. it would restart recording in that case.
+        if 1 != int(instrument.ask(":function:wrecord:enable?")):
+            instrument.write(":stop")
+        elif "STOP" != instrument.ask(":function:wrecord:operate?"):
+            instrument.write(":function:wrecord:operate stop")
 
-    if(1 == int(instrument.ask(":function:wrecord:enable?"))):
-        instrument.write(":function:wreplay:stop")
-        instrument.write(":function:wreplay:fstart 1")
-        record_count = int(instrument.ask(":function:wreplay:fmax?"))
-        instrument.write(":function:wreplay:fend {}".format(record_count))
+        if(1 == int(instrument.ask(":function:wrecord:enable?"))):
+            instrument.write(":function:wreplay:stop")
+            instrument.write(":function:wreplay:fstart 1")
+            record_count = int(instrument.ask(":function:wreplay:fmax?"))
+            instrument.write(":function:wreplay:fend {}".format(record_count))
 
-    if record_count < 0:
-        dump_all_channels(instrument, -1)
-    else:
-        for n in range(1, record_count+1):
-            instrument.write(":function:wreplay:fcurrent {}".format(n))
-            print("dumping record {} of {}".format(
-                    instrument.ask(":function:wreplay:fcurrent?"),
-                    record_count))
-            dump_all_channels(instrument, n)
+        if record_count < 0:
+            dump_all_channels(instrument, -1)
+        else:
+            for n in range(1, record_count+1):
+                instrument.write(":function:wreplay:fcurrent {}".format(n))
+                print("dumping record {} of {}".format(
+                        instrument.ask(":function:wreplay:fcurrent?"),
+                        record_count))
+                dump_all_channels(instrument, n)
+    except KeyboardInterrupt:
+        # force reconnect in case connection was corrupted?
+        # not seen so far, so don't for now.
+        #instrument = vxi11.Instrument(sys.argv[1])
+        pass
+
+    if beeper != 0:
+        instrument.write(":system:beeper 1")
 
