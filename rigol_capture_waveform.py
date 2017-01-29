@@ -50,7 +50,7 @@ def dump_all_channels(instrument, record_id):
         filename = "{}_capture_waveform_{}{}_{}KSPS_yinc{}E-6{}.raw".format(
                                 now,
                                 ("" if -1 == record_id
-                                    else ("REC%04d-" % record_id)),
+                                    else ("REC%04d_" % record_id)),
                                 channel,
                                 ksps,
                                 yincE_6,
