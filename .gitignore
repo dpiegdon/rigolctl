@@ -1,6 +1,7 @@
 capture_screen.png
 capture_waveform*.raw
 *.raw
+*.png
 *.pyc
 .*.swp
 .swp
