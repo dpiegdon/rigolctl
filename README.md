@@ -1,6 +1,26 @@
 
 # Rigol VXI11 remote control tool for the command line
 
+## Tools
+
+Remote-control via all interfaces supported by VXI11 interface.
+
+Supported features:
+
+* save screenshot
+
+* save recorded waveforms from memory
+
+* save and restore current setup
+
+## Dependencies
+
+### python-vxi11
+
+basic python interface to vxi11
+
+https://github.com/python-ivi/python-vxi11
+
 ## Prior Art
 
 ### scopeio
@@ -14,16 +34,4 @@ https://github.com/LuhaSoft/scopeio
 Spectrum Analyzer for the Rigol DS1000 series digital scopes
 
 https://github.com/rheslip/PyDSA
-
-## Dependencies
-
-### python-vxi11
-
-basic python interface to vxi11
-
-https://github.com/python-ivi/python-vxi11
-
-## Usage
-
-(TBD)
 
