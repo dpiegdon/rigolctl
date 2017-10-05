@@ -7,9 +7,9 @@ from _rigol_setting import Setting, set_settings
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("{} <device> <filename>")
-        print(" - device:   vxi11 identifier to device (e.g. hostname)")
-        print(" - filename: where to save the setup")
+        print("{} <device> <filename>".format(sys.argv[0]))
+        print(" - <device>:   vxi11 identifier to device (e.g. hostname)")
+        print(" - <filename>: where to save the setup")
         sys.exit(1)
     instrument = vxi11.Instrument(sys.argv[1])
 

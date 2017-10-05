@@ -75,7 +75,8 @@ def dump_all_channels(instrument, record_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("argument must be vxi11 identifier to device (e.g. hostname)")
+        print("{} <device>".format(sys.argv[0]))
+        print(" - <device>:   vxi11 identifier to device (e.g. hostname)")
         sys.exit(1)
     instrument = vxi11.Instrument(sys.argv[1])
 
