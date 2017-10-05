@@ -36,9 +36,10 @@ def dump_all_channels(instrument, record_id):
         memdepth = int(round(float(preamble[2])))
         ksps = int(round(1/float(preamble[4])/1000))
         yincE_6 = int(round(float(preamble[7])*1000*1000))
+        yref = int(round(float(preamble[9])))
 
-        print(" Channel {}, {} Points, {} KSa/s, YINC: {}E-6...  ".format(
-                 channel, memdepth, ksps, yincE_6), end="")
+        print(" Channel {}, {} Points, {} KSa/s, YINC: {}E-6, YREF {}...".\
+                format(channel, memdepth, ksps, yincE_6, yref), end="")
         sys.stdout.flush()
 
         if(preamble[3] != "1"):
@@ -47,14 +48,15 @@ def dump_all_channels(instrument, record_id):
         else:
             avg = ""
 
-        filename = "{}_capture_waveform_{}{}_{}KSPS_yinc{}E-6{}.raw".format(
-                                now,
-                                ("" if -1 == record_id
-                                    else ("REC%04d_" % record_id)),
-                                channel,
-                                ksps,
-                                yincE_6,
-                                avg)
+        filename = "{}_capture_waveform_{}{}_{}KSPS_yinc{}E-6_yref{}{}.raw".\
+                format(now,
+                        ("" if -1 == record_id
+                                else ("REC%04d_" % record_id)),
+                        channel,
+                        ksps,
+                        yincE_6,
+                        yref,
+                        avg)
         with open(filename, "w") as dump:
             pos = 1
             while pos <= memdepth:
