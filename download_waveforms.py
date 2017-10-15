@@ -72,21 +72,27 @@ def dump_channel(instrument, record_id, channel):
     
 
 if __name__ == "__main__":
+    channels = ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
+            "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+            "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15" ];
+
     if len(sys.argv) < 2:
-        print("{} <device>".format(sys.argv[0]))
+        print("{} <device> [channel [channel [...]]]".format(sys.argv[0]))
         print(" - <device>:   vxi11 identifier to device (e.g. hostname)")
+        print(" - [channel]:  channel to dump. one of: " + ", ".join(channels))
         sys.exit(1)
     instrument = vxi11.Instrument(sys.argv[1])
 
     if len(sys.argv) > 2:
-        channels = sys.argv[2:];
+        selected_channels = sys.argv[2:];
+        for c in selected_channels:
+            if c not in channels:
+                print("unknown channel '{}'. aborting.".format(c))
+                sys.exit(1)
     else:
-        channels = ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
-                "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
-                "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15" ];
+        selected_channels = channels
 
-
-    print("Download Channels: {}".format(channels))
+    print("Download Channels: {}".format(selected_channels))
 
     now = int(round(time.time()))
 
@@ -113,7 +119,7 @@ if __name__ == "__main__":
             instrument.write(":function:wreplay:fend {}".format(record_count))
 
         if record_count < 0:
-            for ch in channels:
+            for ch in selected_channels:
                 dump_channel(instrument, -1, ch)
         else:
             for n in range(1, record_count+1):
@@ -121,7 +127,7 @@ if __name__ == "__main__":
                 print("dumping record {} of {}".format(
                         instrument.ask(":function:wreplay:fcurrent?"),
                         record_count))
-                for ch in channels:
+                for ch in selected_channels:
                     dump_channel(instrument, n, ch)
 
     except KeyboardInterrupt:
