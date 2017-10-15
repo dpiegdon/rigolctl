@@ -6,6 +6,7 @@ import vxi11
 import time
 
 from _rigol_channel import channels, save_channel_to_file
+from _rigol_setting import disabled_beeper, locked_keyboard
 
 if __name__ == "__main__":
 
@@ -26,16 +27,11 @@ if __name__ == "__main__":
         selected_channels = channels
 
     print("Download channels: " + ", ".join(selected_channels))
-
     print(instrument.ask("*idn?"))
 
-    beeper = int(instrument.ask(":system:beeper?"))
-    if beeper != 0:
-        instrument.write(":system:beeper 0")
-
-    now = int(round(time.time()))
-    record_count = -1
-    try:
+    with disabled_beeper(instrument), locked_keyboard(instrument):
+        now = int(round(time.time()))
+        record_count = -1
         # only stop if not in waveform recording mode and not actually
         # recording right now. it would restart recording in that case.
         if 1 != int(instrument.ask(":function:wrecord:enable?")):
@@ -60,13 +56,4 @@ if __name__ == "__main__":
                         record_count))
                 for ch in selected_channels:
                     save_channel_to_file(instrument, now, ch, n)
-
-    except KeyboardInterrupt:
-        # force reconnect in case connection was corrupted?
-        # not seen so far, so don't for now.
-        #instrument = vxi11.Instrument(sys.argv[1])
-        pass
-
-    if beeper != 0:
-        instrument.write(":system:beeper 1")
 

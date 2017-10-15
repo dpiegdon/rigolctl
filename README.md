@@ -7,11 +7,11 @@ Remote-control via all interfaces supported by VXI11 interface.
 
 Supported features:
 
-* save screenshot
+* save screenshot.
 
-* save recorded waveforms from memory
+* save recorded waveforms from memory. data for each channel is saved as string of unsigned chars. supports saving multiple records and all visible channels.
 
-* save and restore current setup
+* save and restore current setup. (some settings sadly cannot be saved, like channel labels)
 
 ## Dependencies
 
