@@ -87,7 +87,7 @@ def save_channel_to_file(instrument, prefix, channel, record_id = None):
         return False
     (ksps, yincE_6, yref, avg, _, data) = value
 
-    filename = "{}_capture_waveform_{}{}_ksps{}_yinc{}E-6_yref{}{}.raw".format(
+    filename = "{}_capture_waveform_{}{}_ksps{}_yinc{}E-6_yref{}{}.u8".format(
                     prefix,
                     ("" if record_id is None
                             else ("REC%04d_" % record_id)),

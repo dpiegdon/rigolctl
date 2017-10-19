@@ -13,6 +13,8 @@ Supported features:
 
 * save and restore current setup. (some settings sadly cannot be saved, like channel labels)
 
+* scripts to convert dumped channel data to wave and sigrok format, thus making downloaded data analyzable in e.g. pulseview
+
 ## Dependencies
 
 ### python-vxi11
