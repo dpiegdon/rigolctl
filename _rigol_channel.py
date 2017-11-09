@@ -4,7 +4,6 @@ from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-import vxi11
 
 channels = ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
         "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
