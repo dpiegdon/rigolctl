@@ -1,6 +1,8 @@
 #
 from __future__ import print_function
 
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 import vxi11
 
@@ -56,6 +58,13 @@ def get_channel(instrument, channel):
             format(channel, memdepth, ksps, yincE_6, yref, avg), end="")
     sys.stdout.flush()
 
+    def plot_spec(data, sample_rate):
+        values = np.array(bytearray(data))
+        nfft= 2**12
+        plt.specgram(values, nfft, sample_rate, noverlap=2**8)
+        plt.ylim(50e6,80e6);
+        plt.show(block=False)
+
     data = r''
     pos = 1
     while pos <= memdepth:
@@ -70,6 +79,9 @@ def get_channel(instrument, channel):
         pos += chunksize
         chunk = chunk[11:-1]
         data += chunk
+        plot_spec(data, ksps*1000)
+
+    plt.show(block=True)
 
     print("")
     return (ksps, yincE_6, yref, avg, memdepth, data)
