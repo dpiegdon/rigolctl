@@ -1,13 +1,11 @@
 #
 from __future__ import print_function
 
-import numpy as np
-import matplotlib.pyplot as plt
 import sys
 
 channels = ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
         "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
-        "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15"];
+        "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15"]
 
 
 def get_channel(instrument, channel):
@@ -58,13 +56,6 @@ def get_channel(instrument, channel):
             format(channel, memdepth, ksps, yincE_6, yref, avg), end="")
     sys.stdout.flush()
 
-    def plot_spec(data, sample_rate):
-        values = np.array(bytearray(data))
-        nfft= 2**12
-        plt.specgram(values, nfft, sample_rate, noverlap=2**8)
-        plt.ylim(50e6,80e6);
-        plt.show(block=False)
-
     data = r''
     pos = 1
     while pos <= memdepth:
@@ -79,11 +70,8 @@ def get_channel(instrument, channel):
         pos += chunksize
         chunk = chunk[11:-1]
         data += chunk
-        plot_spec(data, ksps*1000)
 
-    plt.show(block=True)
-
-    print("")
+    print("\nCollecting data done.")
     return (ksps, yincE_6, yref, avg, memdepth, data)
 
 
