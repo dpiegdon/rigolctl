@@ -3,7 +3,7 @@
 import sys
 import pickle
 import vxi11
-from _rigol_setting import Setting, get_settings
+from _rigol_setting import get_settings
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

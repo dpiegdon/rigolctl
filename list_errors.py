@@ -2,7 +2,6 @@
 
 import sys
 import vxi11
-import time
 
 if __name__ == "__main__":
     pname = sys.argv[0]
