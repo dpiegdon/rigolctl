@@ -1,30 +1,24 @@
 #!/usr/bin/env python2
 from __future__ import print_function
 
-import sys
 import vxi11
 import time
+import argparse
 
 from _rigol_channel import channels, save_channel_to_file
 from _rigol_setting import disabled_beeper, locked_keyboard
 
+
 if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("DEVICE", nargs=1, help="Device to connect to")
+    ap.add_argument("CHANNELS", nargs="*",
+                    help="Channels to download, one of " + ", ".join(channels))
+    args = ap.parse_args()
+    device = args.DEVICE[0]
+    selected_channels = args.CHANNELS if len(args.CHANNELS) > 0 else channels
 
-    if len(sys.argv) < 2:
-        print("{} <device> [channel [channel [...]]]".format(sys.argv[0]))
-        print(" - <device>:   vxi11 identifier to device (e.g. hostname)")
-        print(" - [channel]:  channel to dump. one of: " + ", ".join(channels))
-        sys.exit(1)
-    instrument = vxi11.Instrument(sys.argv[1])
-
-    if len(sys.argv) > 2:
-        selected_channels = sys.argv[2:]
-        for c in selected_channels:
-            if c not in channels:
-                print("unknown channel '{}'. aborting.".format(c))
-                sys.exit(1)
-    else:
-        selected_channels = channels
+    instrument = vxi11.Instrument(device)
 
     print("Download channels: " + ", ".join(selected_channels))
     print(instrument.ask("*idn?"))

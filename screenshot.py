@@ -1,37 +1,22 @@
 #!/usr/bin/env python2
 
-import sys
 import vxi11
 import time
+import argparse
 
 if __name__ == "__main__":
-    pname = sys.argv[0]
-    sys.argv = sys.argv[1:]
+    ap = argparse.ArgumentParser()
+    ap.add_argument("DEVICE", nargs=1, help="Device to connect to")
+    ap.add_argument("--invert", "-i", action="store_true",
+                    help="Invert color in plot")
+    ap.add_argument("--nocolor", "-n", action="store_true",
+                    help="Plot in monochrome")
+    args = ap.parse_args()
+    device = args.DEVICE[0]
+    invert = "on" if args.invert else "off"
+    color = "off" if args.nocolor else "on"
 
-    def abort_with_help():
-        print("{} [invert] <device>".format(pname))
-        print(" - invert:     invert plot colors")
-        print(" - nocolor:    plot without color")
-        print(" - <device>:   vxi11 identifier to device (e.g. hostname)")
-        sys.exit(1)
-
-    invert = "off"
-    color = "on"
-
-    if len(sys.argv) == 0:
-        abort_with_help()
-
-    while len(sys.argv) > 1:
-        if sys.argv[0] == "invert":
-            invert = "on"
-        elif sys.argv[0] == "nocolor":
-            color = "off"
-        else:
-            print("unknown statement '{}'".format(sys.argv[0]))
-            abort_with_help()
-        sys.argv = sys.argv[1:]
-
-    instrument = vxi11.Instrument(sys.argv[0])
+    instrument = vxi11.Instrument(device)
 
     print(instrument.ask("*IDN?"))
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python2
 
-import sys
+from __future__ import print_function
 import vxi11
-import termios
-import time
+import argparse
 
 
 def Dp800_set(instrument, key):
@@ -44,13 +43,12 @@ devicefunctions = {
 
 
 if __name__ == "__main__":
-    pname = sys.argv[0]
-    sys.argv = sys.argv[1:]
+    ap = argparse.ArgumentParser()
+    ap.add_argument("DEVICE", nargs=1, help="Device to connect to")
+    args = ap.parse_args()
+    device = args.DEVICE[0]
 
-    invert = "off"
-    color = "on"
-
-    instrument = vxi11.Instrument(sys.argv[0])
+    instrument = vxi11.Instrument(device)
 
     idn = instrument.ask("*IDN?")
     print(idn)
@@ -68,8 +66,6 @@ if __name__ == "__main__":
     while True:
         print("installed options: " +
               devicefunctions[device]["get"](instrument))
-        time.sleep(0.1)
-        termios.tcflush(sys.stdin, termios.TCIFLUSH)
         key = raw_input("key> ")
         if(key == ""):
             break

@@ -1,19 +1,23 @@
 #!/usr/bin/env python2
 
-import sys
 import vxi11
 import pickle
+import argparse
+
 from _rigol_setting import set_settings
 
+
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("{} <device> <filename>".format(sys.argv[0]))
-        print(" - <device>:   vxi11 identifier to device (e.g. hostname)")
-        print(" - <filename>: where to save the setup")
-        sys.exit(1)
-    instrument = vxi11.Instrument(sys.argv[1])
+    ap = argparse.ArgumentParser()
+    ap.add_argument("DEVICE", nargs=1, help="Device to connect to")
+    ap.add_argument("FILENAME", nargs=1, help="File to load setup from")
+    args = ap.parse_args()
+    device = args.DEVICE[0]
+    filename = args.FILENAME[0]
+
+    instrument = vxi11.Instrument(device)
 
     print(instrument.ask("*IDN?"))
 
-    saved_settings = pickle.load(open(sys.argv[2], 'r'))
+    saved_settings = pickle.load(open(filename, 'r'))
     set_settings(instrument, saved_settings)
