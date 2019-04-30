@@ -17,12 +17,11 @@ if __name__ == "__main__":
         abort_with_help()
 
     instrument = vxi11.Instrument(sys.argv[0])
-    
+
     print(instrument.ask("*IDN?"))
 
     while(True):
         err = instrument.ask(":system:error?")
         print(err)
         if(err == '0,"No error"'):
-            break;
-
+            break

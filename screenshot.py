@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) == 0:
         abort_with_help()
-    
+
     while len(sys.argv) > 1:
         if sys.argv[0] == "invert":
             invert = "on"
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         sys.argv = sys.argv[1:]
 
     instrument = vxi11.Instrument(sys.argv[0])
-    
+
     print(instrument.ask("*IDN?"))
 
     now = int(round(time.time()))
@@ -44,4 +44,3 @@ if __name__ == "__main__":
         dump.write(img)
 
     print("plot saved as: {}".format(filename))
-

@@ -4,8 +4,8 @@ from __future__ import print_function
 import sys
 
 channels = ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
-        "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
-        "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15"]
+            "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
+            "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15"]
 
 
 def get_channel(instrument, channel):
@@ -52,8 +52,8 @@ def get_channel(instrument, channel):
     yref = int(round(float(preamble[9])))
     avg = int(preamble[3])
 
-    print("Channel {}, {} Points, KSPS {}, YINC {}E-6, YREF {}, AVG {}...". \
-            format(channel, memdepth, ksps, yincE_6, yref, avg), end="")
+    print("Channel {}, {} Points, KSPS {}, YINC {}E-6, YREF {}, AVG {}...".
+          format(channel, memdepth, ksps, yincE_6, yref, avg), end="")
     sys.stdout.flush()
 
     data = r''
@@ -81,7 +81,8 @@ def save_channel_to_file(instrument, prefix, channel, record_id=None):
 
     prefix      -- prefix to use in filename
     channel     -- channel to download
-    record_id   -- None or an integer (counter) specifying which record was set.
+    record_id   -- None or an integer (counter)
+                   specifying which record was set.
     """
     value = get_channel(instrument, channel)
     if value is None:
@@ -91,7 +92,7 @@ def save_channel_to_file(instrument, prefix, channel, record_id=None):
     filename = "{}_capture_waveform_{}{}_ksps{}_yinc{}E-6_yref{}{}.u8".format(
             prefix,
             ("" if record_id is None
-                    else ("REC%04d_" % record_id)),
+             else ("REC%04d_" % record_id)),
             channel,
             ksps,
             yincE_6,

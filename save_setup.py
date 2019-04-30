@@ -16,4 +16,3 @@ if __name__ == "__main__":
     print(instrument.ask("*IDN?"))
 
     pickle.dump(get_settings(instrument), open(sys.argv[2], 'wb'))
-

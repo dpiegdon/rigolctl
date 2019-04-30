@@ -15,5 +15,5 @@ if __name__ == "__main__":
 
     print(instrument.ask("*IDN?"))
 
-    set_settings(instrument, saved_settings = pickle.load(open(sys.argv[2], 'r')))
-
+    saved_settings = pickle.load(open(sys.argv[2], 'r'))
+    set_settings(instrument, saved_settings)

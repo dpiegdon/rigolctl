@@ -5,23 +5,29 @@ import time
 
 Setting = collections.namedtuple('Setting', ['name', 'israw', 'value'])
 
+
 def get_settings(instrument):
-    wanted_settings = [ Setting('system:setup',     True,   None)
-                    # this catches MOST settings, but not the below:
-                    ,   Setting('math:fft:mode',    False,  None)
-                    ,   Setting('math:fft:hscale',  False,  None)
-                    ,   Setting('math:fft:hcenter', False,  None)
-                    ]
+    wanted_settings = [Setting('system:setup',     True,   None),
+                       # this catches MOST settings, but not the below:
+                       Setting('math:fft:mode',    False,  None),
+                       Setting('math:fft:hscale',  False,  None),
+                       Setting('math:fft:hcenter', False,  None),
+                       ]
     saved_settings = []
 
     for s in wanted_settings:
         print("saving {}".format(s.name))
         if s.israw:
-            saved_settings.append(Setting(s.name, s.israw, instrument.ask_raw(':' + s.name + '?')))
+            saved_settings.append(
+                    Setting(s.name, s.israw,
+                            instrument.ask_raw(':' + s.name + '?')))
         else:
-            saved_settings.append(Setting(s.name, s.israw, instrument.ask(':' + s.name + '?')))
+            saved_settings.append(
+                    Setting(s.name, s.israw,
+                            instrument.ask(':' + s.name + '?')))
 
     return saved_settings
+
 
 def set_settings(instrument, saved_settings):
     for s in saved_settings:
@@ -32,9 +38,10 @@ def set_settings(instrument, saved_settings):
             instrument.write(':' + s.name + ' ' + s.value)
         time.sleep(1)
 
+
 class disabled_beeper(object):
     """ context which disables beeper for some piece of code
-        
+
         with disabled_beeper(instrument):   << beeper is disabled
             some code
                                             << beeper is enabled
@@ -53,9 +60,10 @@ class disabled_beeper(object):
         if self._was_enabled != 0:
             self._instrument.write(":system:beeper 1")
 
+
 class locked_keyboard(object):
     """ context which completely locks the device keyboard:
-        
+
         with locked_keyboard(instrument):   << keyboard is locked
             some code
                                             << keyboard is unlocked

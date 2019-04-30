@@ -18,7 +18,7 @@ if __name__ == "__main__":
     instrument = vxi11.Instrument(sys.argv[1])
 
     if len(sys.argv) > 2:
-        selected_channels = sys.argv[2:];
+        selected_channels = sys.argv[2:]
         for c in selected_channels:
             if c not in channels:
                 print("unknown channel '{}'. aborting.".format(c))
@@ -56,4 +56,3 @@ if __name__ == "__main__":
                         record_count))
                 for ch in selected_channels:
                     save_channel_to_file(instrument, now, ch, n)
-
