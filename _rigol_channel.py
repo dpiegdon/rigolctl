@@ -2,11 +2,11 @@
 from __future__ import print_function
 
 import sys
-import vxi11
 
 channels = ["CHAN1", "CHAN2", "CHAN3", "CHAN4", "MATH",
         "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7",
-        "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15" ];
+        "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15"]
+
 
 def get_channel(instrument, channel):
     """ download specified channel.
@@ -47,22 +47,22 @@ def get_channel(instrument, channel):
     preamble = instrument.ask(":waveform:preamble?").split(",")
 
     memdepth = int(round(float(preamble[2])))
-    ksps = int(round(1/float(preamble[4])/1000))
-    yincE_6 = int(round(float(preamble[7])*1000*1000))
+    ksps = int(round(1 / float(preamble[4]) / 1000))
+    yincE_6 = int(round(float(preamble[7]) * 1000 * 1000))
     yref = int(round(float(preamble[9])))
     avg = int(preamble[3])
 
-    print("Channel {}, {} Points, KSPS {}, YINC {}E-6, YREF {}, AVG {}...".\
+    print("Channel {}, {} Points, KSPS {}, YINC {}E-6, YREF {}, AVG {}...". \
             format(channel, memdepth, ksps, yincE_6, yref, avg), end="")
     sys.stdout.flush()
 
     data = r''
     pos = 1
     while pos <= memdepth:
-        chunksize = min(memdepth+1-pos, 250000)
+        chunksize = min(memdepth + 1 - pos, 250000)
         start = pos
         end = pos + chunksize - 1
-        print(" {}K-{}K".format(start/1000, end/1000), end="")
+        print(" {}K-{}K".format(start / 1000, end / 1000), end="")
         sys.stdout.flush()
         instrument.write(":waveform:start {}".format(start))
         instrument.write(":waveform:stop {}".format(end))
@@ -71,10 +71,11 @@ def get_channel(instrument, channel):
         chunk = chunk[11:-1]
         data += chunk
 
-    print("")
+    print("\nCollecting data done.")
     return (ksps, yincE_6, yref, avg, memdepth, data)
 
-def save_channel_to_file(instrument, prefix, channel, record_id = None):
+
+def save_channel_to_file(instrument, prefix, channel, record_id=None):
     """ save channel to file
     filename is automatically generated, see below.
 
@@ -88,16 +89,15 @@ def save_channel_to_file(instrument, prefix, channel, record_id = None):
     (ksps, yincE_6, yref, avg, _, data) = value
 
     filename = "{}_capture_waveform_{}{}_ksps{}_yinc{}E-6_yref{}{}.u8".format(
-                    prefix,
-                    ("" if record_id is None
-                            else ("REC%04d_" % record_id)),
-                    channel,
-                    ksps,
-                    yincE_6,
-                    yref,
-                    "" if avg == 1 else "_avg{}".format(avg)
-                )
+            prefix,
+            ("" if record_id is None
+                    else ("REC%04d_" % record_id)),
+            channel,
+            ksps,
+            yincE_6,
+            yref,
+            "" if avg == 1 else "_avg{}".format(avg)
+            )
     with open(filename, "w") as dump:
         dump.write(data)
     return True
-
