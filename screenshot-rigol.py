@@ -20,12 +20,12 @@ if __name__ == "__main__":
 
     print(instrument.ask("*IDN?"))
 
-    now = int(round(time.time()))
-    filename = "{}_capture_screen.png".format(now)
+    now = time.time()
+    filename = "screenshot_{}.png".format(now)
 
     with open(filename, "w") as dump:
         img = instrument.ask_raw(':disp:data? '+color+','+invert+',png')
         img = img[11:]
         dump.write(img)
 
-    print("plot saved as: {}".format(filename))
+    print(filename)

@@ -23,9 +23,9 @@ if __name__ == "__main__":
               "CMDIV,1,AUTO,OFF,FORMAT,LANDSCAPE,BCKG,BLACK")
 
     # dump image
+    image = b''
+    chunksize = 16384
     try:
-        image = b''
-        chunksize = 16384
         dev.write("SCREEN_DUMP")
         while True:
             new_bit = dev.read(len=chunksize)
@@ -38,6 +38,9 @@ if __name__ == "__main__":
     # set back to use internal printer for hardcopy
     dev.write("HCSU DEV,TIFFCOL,PORT,PRT,PFEED,OFF,PENS,2,PSIZE,A4," +
               "CMDIV,1,AUTO,OFF,FORMAT,LANDSCAPE,BCKG,BLACK")
+
+    # put device back into local mode
+    dev.ibloc()
 
     # store image to file
     filename = "screenshot_{}.tiff".format(time.time())
