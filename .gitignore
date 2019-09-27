@@ -1,5 +1,7 @@
 capture_screen.png
 *.png
+*.tiff
+*.pcl
 *.cfg
 *.u8
 *.wav
