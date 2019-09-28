@@ -9,6 +9,14 @@ Supported features:
 
 * save screenshot.
 
+ - Rigol:
+
+  ![Example Rigol screenshot](https://github.com/dpiegdon/rigolctl/blob/master/example/example_rigol_mso1074z.png)
+
+ - Lecroy:
+
+  ![Example LeCroy screenshot](https://github.com/dpiegdon/rigolctl/blob/master/example/example_lecroy_lc574.png)
+
 * save recorded waveforms from memory. data for each channel is saved as string of unsigned chars. supports saving multiple records and all visible channels.
 
 * save and restore current setup. (some settings sadly cannot be saved, like channel labels)
